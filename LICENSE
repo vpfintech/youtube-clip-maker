@@ -1,0 +1,144 @@
+YT Clip Maker Source-Available License
+Version 1.1
+
+Copyright (c) 2026 VP FinTech, LLC. All rights reserved.
+
+This is a source-available license, not an open-source license. The source code
+is made available for transparency and limited personal use under the terms
+below. It does not grant the freedoms associated with open-source or free
+software licenses.
+
+
+1. DEFINITIONS
+
+"Software" means the source code, object code, and any accompanying files
+distributed under this license, including any portion of them.
+
+"You" (or "Your") means the individual or entity exercising the permissions
+granted by this license.
+
+"Licensor" means VP FinTech, LLC.
+
+"Third-Party Service" means any external website, platform, API, or service
+that the Software interacts with, connects to, or relies upon, including but not
+limited to YouTube.
+
+
+2. GRANT OF LICENSE
+
+Subject to Your compliance with this license, the Licensor grants You a
+worldwide, royalty-free, non-exclusive, non-transferable, revocable license to:
+
+  a. View, download, and run the Software for personal, educational, and
+     internal non-commercial purposes;
+  b. Inspect the source code to verify its safety and functionality; and
+  c. Modify the Software for Your own personal, educational, or internal
+     non-commercial use.
+
+
+3. RESTRICTIONS
+
+You may not:
+
+  a. Sell, license, sublicense, rent, lease, or otherwise commercialize the
+     Software;
+  b. Include the Software or any substantial portion of it in any paid product,
+     paid service, commercial application, or commercial workflow;
+  c. Offer the Software or any derivative work as a hosted service, web
+     application, SaaS product, API, or cloud-based tool;
+  d. Create, publish, or distribute a web-based version of the Software using
+     this code or any substantial portion of it;
+  e. Use the Software to develop, support, or operate any product or service
+     that competes with the Licensor's products or services;
+  f. Remove, obscure, or alter any copyright, license, or attribution notice.
+
+
+4. DISTRIBUTION
+
+You may share unmodified copies of this repository or application for
+non-commercial purposes, provided that this license is included in full and all
+notices are preserved.
+
+
+5. YOUR RESPONSIBILITIES AND ACCEPTABLE USE
+
+You are solely responsible for Your use of the Software. Without limiting the
+foregoing:
+
+  a. You are responsible for ensuring that Your use of the Software complies
+     with all applicable laws, regulations, and the terms of service, acceptable
+     use policies, and other terms of any Third-Party Service You access,
+     connect to, or use in connection with the Software.
+
+  b. You are responsible for obtaining any rights, licenses, permissions, or
+     consents necessary for any content You access, download, process, generate,
+     or distribute using the Software.
+
+  c. The Software is provided as a general-purpose tool. The Licensor does not
+     direct, encourage, or require any particular use of the Software, and any
+     decision to use the Software in a given manner is Yours alone.
+
+  d. You are responsible for any accounts You use with the Software and for any
+     charges, obligations, or terms associated with them.
+
+
+6. THIRD-PARTY SERVICES
+
+The Software may interact with Third-Party Services that are not owned or
+controlled by the Licensor. The Licensor does not endorse, and is not
+responsible or liable for, any Third-Party Service, including its availability,
+terms, content, or conduct. Your use of any Third-Party Service is governed
+solely by the agreement between You and that service. The Licensor is not a
+party to that relationship and assumes no obligations arising from it.
+
+
+7. NO WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
+THE LICENSOR DOES NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED,
+ERROR-FREE, SECURE, OR THAT IT WILL FUNCTION WITH ANY THIRD-PARTY SERVICE.
+
+
+8. LIMITATION OF LIABILITY
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE
+LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL,
+EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, DATA, GOODWILL, OR
+OTHER INTANGIBLE LOSSES, ARISING OUT OF OR RELATING TO YOUR USE OF OR INABILITY
+TO USE THE SOFTWARE, WHETHER BASED ON WARRANTY, CONTRACT, TORT, OR ANY OTHER
+LEGAL THEORY, AND WHETHER OR NOT THE LICENSOR HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGES. THE LICENSOR'S TOTAL AGGREGATE LIABILITY ARISING
+OUT OF OR RELATING TO THE SOFTWARE SHALL NOT EXCEED ZERO U.S. DOLLARS ($0),
+REFLECTING THAT THE SOFTWARE IS PROVIDED AT NO CHARGE.
+
+
+9. INDEMNIFICATION
+
+You agree to indemnify, defend, and hold harmless the Licensor and its officers,
+members, and agents from and against any claims, liabilities, damages, losses,
+and expenses (including reasonable legal fees) arising out of or in any way
+connected with: (a) Your use of the Software; (b) Your violation of this
+license; (c) Your violation of any applicable law or any terms of a Third-Party
+Service; or (d) Your infringement of any rights of a third party.
+
+
+10. TERMINATION
+
+This license and the rights granted under it terminate automatically if You
+breach any of its terms. Upon termination, You must cease all use of the
+Software and destroy all copies in Your possession or control. Sections 5
+through 11 survive termination.
+
+
+11. GENERAL
+
+Any use not expressly permitted by this license requires the prior written
+permission of the Licensor.
+
+This license is governed by the laws of the State of Indiana, without regard to
+its conflict-of-laws principles. If any provision of this license is held to be
+unenforceable, the remaining provisions remain in full force and effect.
+
+The Licensor reserves all rights not expressly granted under this license.

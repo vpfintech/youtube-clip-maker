@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YT Clip Maker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon" data-feather="scissors"></div>
+      <div>
+        <h1>Clip Maker</h1>
+        <p>YouTube to clips, instantly.</p>
+      </div>
+    </div>
+    <section class="recent-projects">
+      <button class="secondary full new-project-button" id="newProjectBtn"><i data-feather="plus"></i>New Project</button>
+      <div class="recent-projects-header">
+        <h2>Recent Projects</h2>
+      </div>
+      <div id="recentProjectsList" class="recent-projects-list empty-recent">
+        <span>No recent projects yet.</span>
+      </div>
+    </section>
+    <div class="creator-tools-row">More YouTube Automation tools available at <a id="creatorToolsLink" href="http://ytatools.co" target="_blank" rel="noreferrer">ytatools.co</a></div>
+  </aside>
+
+  <main class="app-shell">
+    <section class="hero">
+      <h2>Download YouTube videos.<br />Clip every X seconds.</h2>
+      <p>Add one or more YouTube URLs to download videos locally,<br />then select and clip into high-quality segments.</p>
+    </section>
+
+    <section class="card project-card">
+      <div class="card-title-row">
+        <div>
+          <h3>Project Name</h3>
+          <p>This creates the parent folder for downloaded videos and clips.</p>
+        </div>
+      </div>
+      <label class="project-name-control">
+        <i data-feather="folder"></i>
+        <input id="projectName" type="text" maxlength="120" placeholder="type your project name" autocomplete="off" />
+      </label>
+      <p class="requirement-note" id="projectNameNote">Required before downloading or generating clips.</p>
+    </section>
+
+    <section class="card url-card">
+      <div class="card-title-row">
+        <div>
+          <h3>Add YouTube URLs</h3>
+          <p>Add multiple YouTube video links (one per line).</p>
+        </div>
+      </div>
+      <textarea id="urlInput" spellcheck="false" placeholder="https://www.youtube.com/watch?v=..."></textarea>
+      <div class="action-row">
+        <span>We'll prefer editor-friendly MP4/H.264 when available.</span>
+        <button class="primary" id="findBtn">Find videos</button>
+      </div>
+    </section>
+
+    <section class="workspace card">
+      <div class="left-pane">
+        <h3>Videos (<span id="videoCount">0</span>)</h3>
+        <p>Select a video to preview and create clips.</p>
+        <div id="videoList" class="video-list empty-state">
+          <i data-feather="video"></i>
+          <strong>No videos yet</strong>
+          <span>Add YouTube URLs and click Find videos.</span>
+        </div>
+        <div class="list-footer"><span id="listCount">0 videos</span><span id="totalSize">—</span></div>
+      </div>
+      <div class="right-pane">
+        <div id="previewEmpty" class="preview-empty">
+          <i data-feather="monitor"></i>
+          <strong>Preview will appear here</strong>
+          <span>Find videos, then select one to preview.</span>
+        </div>
+        <div id="previewPanel" class="hidden">
+          <div class="preview-header">
+            <div>
+              <h3 id="previewTitle"></h3>
+              <p id="previewMeta"></p>
+            </div>
+            <button class="icon-btn" id="openYoutubeBtn" title="Open on YouTube"><i data-feather="external-link"></i></button>
+          </div>
+          <div class="video-frame" id="videoFrame"></div>
+          <div id="progressPanel" class="progress-panel hidden" aria-live="polite">
+            <div class="progress-top"><span id="progressLabel">Preparing...</span><span id="progressPercent">0%</span></div>
+            <div class="progress-track"><span id="progressFill"></span></div>
+          </div>
+          <div class="clip-settings">
+            <h3>Clip Settings</h3>
+            <p>Choose how to clip this video.</p>
+            <div class="settings-grid">
+              <label class="setting-control"><i data-feather="scissors"></i><span>Clip every</span><input id="clipSeconds" class="number-input" type="number" min="1" step="1" value="30" inputmode="numeric" /><span>seconds</span></label>
+              <div class="setting-control clip-mode-control">
+                <i data-feather="zap"></i>
+                <span>Mode</span>
+                <div class="segmented-control" role="radiogroup" aria-label="Clip mode">
+                  <label><input type="radio" name="clipMode" value="fast" checked /><span>Fast</span></label>
+                  <label><input type="radio" name="clipMode" value="accurate" /><span>Accurate</span></label>
+                </div>
+                <span class="tooltip-wrap" tabindex="0" aria-label="Clipping mode help">
+                  <i data-feather="info"></i>
+                  <span class="tooltip-card" role="tooltip"><strong>Fast</strong>: fastest for bulk clipping. Splits around your selected duration, but lengths may vary because cuts happen on existing keyframes.<br /><strong>Accurate</strong>: re-encodes and forces keyframes at your selected interval. Uses hardware acceleration when available, otherwise CPU fallback. Slower than Fast.</span>
+                </span>
+              </div>
+              <label class="setting-control toggle-row"><i data-feather="volume-2"></i><span>Include audio</span><input id="includeAudio" type="checkbox" checked /><span class="toggle"></span></label>
+            </div>
+          </div>
+          <div class="action-hint hidden" id="mediaActionHint">Add a project name to enable Download and Generate Clips.</div>
+          <div class="button-row">
+            <button class="secondary" id="downloadBtn"><i data-feather="download"></i>Download</button>
+            <button class="primary" id="clipsBtn"><i data-feather="scissors"></i>Generate Clips</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-card">
+      <span><i data-feather="info"></i> Clips will be saved to your selected output folder.</span>
+      <div class="footer-actions">
+        <button class="secondary" id="viewLogBtn"><i data-feather="terminal"></i>View Log</button>
+        <button class="secondary" id="changeOutputBtn"><i data-feather="folder"></i>Change output folder</button>
+        <button class="secondary danger" id="deleteProjectBtn"><i data-feather="trash-2"></i>Delete Project</button>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast hidden" id="toast"></div>
+  <script src="/feather.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

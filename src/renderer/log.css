@@ -1,0 +1,95 @@
+:root {
+  --brand: #ff4b22;
+  --brand-dark: #f23b13;
+  --ink: #0c0c0d;
+  --text: #151515;
+  --muted: #5f5b55;
+  --line: #ddd7cf;
+  --line-strong: #cec7bd;
+  --panel: rgba(255, 255, 255, 0.72);
+  --bg: #fbf8f2;
+  --shadow: 0 2px 8px rgba(19, 17, 14, 0.10), 0 16px 36px rgba(19, 17, 14, 0.06);
+  --shadow-soft: 0 1px 3px rgba(19, 17, 14, 0.10), 0 10px 26px rgba(19, 17, 14, 0.045);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.92), transparent 34%),
+    linear-gradient(135deg, #fffdf8 0%, #fbf7ef 48%, #f7f2e9 100%);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 252, 247, .76);
+  box-shadow: 0 2px 18px rgba(28, 22, 14, .06);
+  backdrop-filter: blur(16px);
+}
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.55px;
+  font-weight: 850;
+}
+h1 svg {
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+  color: #fff;
+  background: linear-gradient(180deg, #ff6337 0%, var(--brand) 100%);
+  border: 3px solid #141414;
+  border-radius: 12px;
+  box-shadow: 0 2px 0 #141414, 0 10px 18px rgba(255, 75, 34, .22);
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}
+button {
+  border: 1px solid var(--line);
+  color: var(--brand);
+  background: rgba(255, 255, 255, .72);
+  min-height: 42px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255,255,255,.65) inset;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+button:hover { border-color: #f4b19d; background: #fffaf6; transform: translateY(-1px); }
+main { min-height: 0; padding: 18px; }
+pre {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  color: #332b24;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+svg { width: 16px; height: 16px; stroke-width: 2.25; }

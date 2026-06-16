@@ -1,0 +1,72 @@
+{
+  "name": "yt-clip-maker",
+  "version": "0.1.0",
+  "description": "Free, source-available desktop app for downloading YouTube videos and clipping them every X seconds.",
+  "main": "src/main/main.js",
+  "author": "VPFinTech",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": false,
+  "scripts": {
+    "start": "node scripts/start-electron.js",
+    "check": "node scripts/check.js",
+    "check:clip-args": "node scripts/check-clip-args.js",
+    "check:clips": "node scripts/check-clip-durations.js",
+    "fetch-binaries": "node scripts/fetch-binaries.js",
+    "postinstall": "node scripts/fetch-binaries.js",
+    "dist:mac": "electron-builder --mac dmg",
+    "dist:win": "electron-builder --win nsis",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "feather-icons": "^4.29.2"
+  },
+  "devDependencies": {
+    "electron": "^37.8.1",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.vpfintech.youtubeclipmaker",
+    "productName": "YT Clip Maker",
+    "files": [
+      "src/**/*",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "bin",
+        "to": "bin",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "asarUnpack": [
+      "node_modules/@ffmpeg-installer/**"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.video",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false
+    }
+  }
+}
