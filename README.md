@@ -24,6 +24,7 @@ own machine — no external APIs or accounts are required.
 ## Development
 
 ```bash
+node --version # requires Node.js 22.12.0 or newer
 npm install
 npm start
 ```
@@ -49,7 +50,7 @@ for personal, educational, and non-commercial use under the [LICENSE](./LICENSE)
 Requirements:
 
 - macOS
-- Node.js LTS
+- Node.js 22.12.0 or newer
 - Git
 
 Steps:
@@ -63,7 +64,7 @@ npm run check:clip-args
 npm run dist:mac
 ```
 
-The macOS build is created in `release/` as a DMG.
+The macOS build is created in `dist/` as a DMG.
 
 Notes:
 
@@ -75,7 +76,7 @@ Notes:
 Requirements:
 
 - Windows 10 or newer
-- Node.js LTS
+- Node.js 22.12.0 or newer
 - Git for Windows
 
 Steps, from PowerShell:
@@ -89,7 +90,7 @@ npm run check:clip-args
 npm run dist:win
 ```
 
-The Windows build is created in `release\` as a one-click NSIS installer.
+The Windows build is created in `dist\` as a one-click NSIS installer.
 
 Notes:
 
