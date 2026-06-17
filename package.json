@@ -22,7 +22,7 @@
     "feather-icons": "^4.29.2"
   },
   "devDependencies": {
-    "electron": "^37.8.1",
+    "electron": "^42.4.1",
     "electron-builder": "^26.0.12"
   },
   "build": {
