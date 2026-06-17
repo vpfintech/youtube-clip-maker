@@ -5,7 +5,6 @@ const os = require('os');
 const http = require('http');
 const https = require('https');
 const { spawn } = require('child_process');
-const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
 const {
   buildClipArgs,
   parseFfmpegProgress,
@@ -26,6 +25,7 @@ let logs = [];
 let currentProjectId = null;
 const activeChildren = new Set();
 let cachedFfmpegEncoders = null;
+let cachedFfmpegPath = null;
 const editorFriendlyDownloadFormat = 'bv*[vcodec^=avc][ext=mp4]+ba[ext=m4a]/bv*[vcodec^=avc]+ba/b[ext=mp4]/bv*+ba/b';
 const releaseApiUrl = 'https://api.github.com/repos/vpfintech/youtube-clip-maker/releases/latest';
 const latestReleaseUrl = 'https://github.com/vpfintech/youtube-clip-maker/releases/latest';
@@ -172,8 +172,16 @@ function ytDlpPath() {
 }
 
 function ffmpegPath() {
-  const p = ffmpegInstaller.path;
-  return app.isPackaged ? p.replace('app.asar', 'app.asar.unpacked') : p;
+  if (cachedFfmpegPath) return cachedFfmpegPath;
+  let p;
+  try {
+    p = require('@ffmpeg-installer/ffmpeg').path;
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error || 'Unknown ffmpeg installer error');
+    throw new Error(`FFmpeg is missing from this app build for ${process.platform}-${process.arch}. Reinstall the latest release or rebuild after npm install. ${detail}`);
+  }
+  cachedFfmpegPath = app.isPackaged ? p.replace('app.asar', 'app.asar.unpacked') : p;
+  return cachedFfmpegPath;
 }
 
 async function getAvailableFfmpegEncoders() {

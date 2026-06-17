@@ -66,4 +66,7 @@ assertSource('src/main/main.js', /label:\s*'Edit'[\s\S]*role:\s*'undo'[\s\S]*rol
 assertSource('src/main/main.js', /label:\s*'Help'[\s\S]*YouTube Automation Tools[\s\S]*http:\/\/ytatools\.co[\s\S]*View License[\s\S]*github\.com\/vpfintech\/youtube-clip-maker\?tab=License-1-ov-file/, 'native Help menu links to ytatools.co and license');
 assertSource('README.md', /YT Clip Maker is \*\*source-available\*\* \(not open source\)/, 'README clearly says source-available, not open source');
 assertSource('README.md', /### macOS[\s\S]*npm run dist:mac[\s\S]*### Windows[\s\S]*npm run dist:win/, 'README includes macOS and Windows build instructions');
+assertNoSource('src/main/main.js', /^const\s+ffmpegInstaller\s*=\s*require\('@ffmpeg-installer\/ffmpeg'\);/m, 'main process does not require ffmpeg at startup');
+assertSource('src/main/main.js', /function ffmpegPath\(\)[\s\S]*require\('@ffmpeg-installer\/ffmpeg'\)[\s\S]*FFmpeg is missing from this app build/, 'main process lazily resolves ffmpeg with a useful runtime error');
+assertSource('package.json', /"optionalDependencies"\s*:\s*\{[\s\S]*"@ffmpeg-installer\/win32-x64"\s*:\s*"\^4\.1\.0"/, 'Windows ffmpeg package is declared for Windows installs/builds');
 process.exit(failed ? 1 : 0);
