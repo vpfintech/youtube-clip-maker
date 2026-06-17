@@ -6,3 +6,4 @@ npm-debug.log*
 .env
 bin/yt-dlp
 bin/yt-dlp.exe
+build/icon.iconset/

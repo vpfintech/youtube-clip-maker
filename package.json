@@ -31,6 +31,9 @@
   "build": {
     "appId": "com.vpfintech.youtubeclipmaker",
     "productName": "YT Clip Maker",
+    "directories": {
+      "buildResources": "build"
+    },
     "files": [
       "src/**/*",
       "package.json",
@@ -49,6 +52,7 @@
       "node_modules/@ffmpeg-installer/**"
     ],
     "mac": {
+      "icon": "build/icon.icns",
       "target": [
         "dmg"
       ],
@@ -56,6 +60,7 @@
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
+      "icon": "build/icon.ico",
       "target": [
         {
           "target": "nsis",
