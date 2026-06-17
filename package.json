@@ -70,7 +70,14 @@
       "oneClick": true,
       "perMachine": false,
       "allowToChangeInstallationDirectory": false
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "vpfintech",
+        "repo": "youtube-clip-maker"
+      }
+    ]
   },
   "overrides": {
     "@electron/get": "^5.0.0",

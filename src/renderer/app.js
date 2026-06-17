@@ -6,7 +6,8 @@ const state = {
   outputFolder: '',
   projectName: '',
   busy: false,
-  progress: null
+  progress: null,
+  updateInfo: null
 };
 
 const $ = (id) => document.getElementById(id);
@@ -79,6 +80,41 @@ function updateOutput(folder) {
   state.outputFolder = folder;
   const storageText = $('storageText');
   if (storageText) storageText.textContent = folder;
+}
+function renderUpdateBanner(info) {
+  const banner = $('updateBanner');
+  if (!banner) return;
+  const show = Boolean(info?.available);
+  banner.classList.toggle('hidden', !show);
+  if (!show) return;
+  state.updateInfo = info;
+  $('updateTitle').textContent = `Update available: v${info.latestVersion}`;
+  const asset = info.assetName ? ` Installer: ${info.assetName}.` : '';
+  $('updateMessage').textContent = `You are on v${info.currentVersion}. Download the latest installer from GitHub Releases and run it over your current install.${asset}`;
+  icon();
+}
+async function checkForUpdates({ manual = false } = {}) {
+  try {
+    const info = await window.clipMaker.checkForUpdates();
+    if (info.available) {
+      renderUpdateBanner(info);
+      return info;
+    }
+    if (manual) {
+      state.updateInfo = info;
+      renderUpdateBanner({ ...info, available: true, latestVersion: info.currentVersion, assetName: '', currentVersion: info.currentVersion });
+      $('updateTitle').textContent = 'You are up to date';
+      $('updateMessage').textContent = `YT Clip Maker v${info.currentVersion} is the latest version. You can still open GitHub Releases if needed.`;
+    }
+    return info;
+  } catch (error) {
+    reportError(error);
+    return null;
+  }
+}
+async function downloadUpdate() {
+  const url = state.updateInfo?.downloadUrl || state.updateInfo?.releaseUrl;
+  await window.clipMaker.openUpdateDownload(url);
 }
 function meta(video) {
   return `${video.durationLabel || '—'}  •  ${video.resolution || 'best'}  •  ${video.ext || 'MP4'}  •  ${video.sizeLabel || '—'}`;
@@ -340,6 +376,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('changeOutputBtn').addEventListener('click', chooseOutput);
   $('deleteProjectBtn').addEventListener('click', deleteProject);
   $('viewLogBtn').addEventListener('click', () => window.clipMaker.showLogWindow());
+  $('dismissUpdateBtn').addEventListener('click', () => $('updateBanner').classList.add('hidden'));
+  $('downloadUpdateBtn').addEventListener('click', downloadUpdate);
   $('openYoutubeBtn').addEventListener('click', () => {
     const video = selectedVideo();
     if (video) window.clipMaker.openYoutube(video.url);
@@ -352,6 +390,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (action === 'new-project') startNewProject();
     if (action === 'change-output-folder') chooseOutput();
     if (action === 'view-log') window.clipMaker.showLogWindow();
+    if (action === 'check-updates') checkForUpdates({ manual: true });
   });
   window.clipMaker.onLog((line) => console.log(line));
   window.clipMaker.onProgress((progress) => {
@@ -359,4 +398,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     setProgress(progress);
   });
   render();
+  checkForUpdates();
 });

@@ -51,7 +51,11 @@ function assertNoSource(file, pattern, message) {
 assertSource('src/renderer/styles.css', /\.video-list\s*\{[^}]*flex:\s*1;[^}]*max-height:\s*none;/s, 'videos list fills available card height');
 assertSource('src/renderer/index.html', /id="mediaActionHint"[^>]*>Add a project name to enable Download and Generate Clips\./, 'disabled media action hint exists');
 assertSource('src/renderer/styles.css', /\.action-hint\s*\{(?=[^}]*background:\s*#2b1712;)(?=[^}]*color:\s*#fff7ed;)(?=[^}]*border-left:\s*4px\s+solid\s+var\(--brand\);)/s, 'disabled media action hint uses high-contrast warning colors');
-assertSource('src/renderer/app.js', /onMenuAction\(\(action\) =>[\s\S]*new-project[\s\S]*change-output-folder[\s\S]*view-log/, 'renderer handles native menu actions');
+assertSource('src/renderer/app.js', /onMenuAction\(\(action\) =>[\s\S]*new-project[\s\S]*change-output-folder[\s\S]*view-log[\s\S]*check-updates/, 'renderer handles native menu actions');
+assertSource('src/renderer/index.html', /id="updateBanner"[\s\S]*Download installer/, 'renderer has inline update banner');
+assertSource('src/renderer/app.js', /function checkForUpdates[\s\S]*window\.clipMaker\.checkForUpdates[\s\S]*openUpdateDownload/, 'renderer checks GitHub Releases for updates');
+assertSource('src/main/preload.js', /checkForUpdates:\s*\(\) => ipcRenderer\.invoke\('check-for-updates'\)[\s\S]*openUpdateDownload/, 'preload exposes update check bridge');
+assertSource('src/main/main.js', /api\.github\.com\/repos\/vpfintech\/youtube-clip-maker\/releases\/latest[\s\S]*selectInstallerAsset[\s\S]*openSafeUpdateUrl/, 'main process checks GitHub Releases and opens installer links');
 assertNoSource('src/renderer/app.js', new RegExp('to' + 'ast', 'i'), 'renderer does not trigger popup notifications');
 assertNoSource('src/renderer/index.html', new RegExp('id="to' + 'ast"|class="to' + 'ast', 'i'), 'renderer HTML has no popup notification element');
 assertNoSource('src/renderer/styles.css', new RegExp('\\.to' + 'ast\\b', 'i'), 'renderer CSS has no popup notification styles');

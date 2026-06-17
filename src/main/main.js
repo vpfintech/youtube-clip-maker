@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const http = require('http');
+const https = require('https');
 const { spawn } = require('child_process');
 const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
 const {
@@ -26,6 +27,8 @@ let currentProjectId = null;
 const activeChildren = new Set();
 let cachedFfmpegEncoders = null;
 const editorFriendlyDownloadFormat = 'bv*[vcodec^=avc][ext=mp4]+ba[ext=m4a]/bv*[vcodec^=avc]+ba/b[ext=mp4]/bv*+ba/b';
+const releaseApiUrl = 'https://api.github.com/repos/vpfintech/youtube-clip-maker/releases/latest';
+const latestReleaseUrl = 'https://github.com/vpfintech/youtube-clip-maker/releases/latest';
 
 app.setName(appName);
 
@@ -321,6 +324,105 @@ function formatBytes(bytes) {
     i += 1;
   }
   return `${n.toFixed(n >= 10 || i === 0 ? 0 : 1)} ${units[i]}`;
+}
+
+function normalizeVersion(value) {
+  return String(value || '').trim().replace(/^v/i, '').split('-')[0];
+}
+
+function compareVersions(a, b) {
+  const left = normalizeVersion(a).split('.').map((part) => Number.parseInt(part, 10) || 0);
+  const right = normalizeVersion(b).split('.').map((part) => Number.parseInt(part, 10) || 0);
+  const length = Math.max(left.length, right.length);
+  for (let i = 0; i < length; i += 1) {
+    if ((left[i] || 0) > (right[i] || 0)) return 1;
+    if ((left[i] || 0) < (right[i] || 0)) return -1;
+  }
+  return 0;
+}
+
+function requestJson(url) {
+  return new Promise((resolve, reject) => {
+    const request = https.get(url, {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        'User-Agent': `${appName}/${app.getVersion()}`
+      }
+    }, (response) => {
+      let body = '';
+      response.setEncoding('utf8');
+      response.on('data', (chunk) => { body += chunk; });
+      response.on('end', () => {
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+          reject(new Error(`GitHub release check returned ${response.statusCode}`));
+          return;
+        }
+        try {
+          resolve(JSON.parse(body));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+    request.setTimeout(10000, () => {
+      request.destroy(new Error('GitHub release check timed out'));
+    });
+    request.on('error', reject);
+  });
+}
+
+function selectInstallerAsset(assets = []) {
+  const preferred = process.platform === 'win32'
+    ? [/setup.*\.exe$/i, /\.exe$/i]
+    : [/arm64\.dmg$/i, /\.dmg$/i, /\.zip$/i];
+  for (const pattern of preferred) {
+    const asset = assets.find((item) => pattern.test(item?.name || ''));
+    if (asset?.browser_download_url) return asset;
+  }
+  return null;
+}
+
+async function checkForUpdates() {
+  const currentVersion = app.getVersion();
+  try {
+    const release = await requestJson(releaseApiUrl);
+    const latestVersion = normalizeVersion(release.tag_name || release.name);
+    const installer = selectInstallerAsset(Array.isArray(release.assets) ? release.assets : []);
+    const available = latestVersion && compareVersions(latestVersion, currentVersion) > 0;
+    return {
+      available: Boolean(available),
+      currentVersion,
+      latestVersion: latestVersion || currentVersion,
+      releaseUrl: release.html_url || latestReleaseUrl,
+      downloadUrl: installer?.browser_download_url || release.html_url || latestReleaseUrl,
+      assetName: installer?.name || '',
+      publishedAt: release.published_at || '',
+      checkedAt: new Date().toISOString()
+    };
+  } catch (error) {
+    appendLog(`Update check failed: ${error.message}`);
+    return {
+      available: false,
+      currentVersion,
+      latestVersion: currentVersion,
+      releaseUrl: latestReleaseUrl,
+      downloadUrl: latestReleaseUrl,
+      assetName: '',
+      error: error.message,
+      checkedAt: new Date().toISOString()
+    };
+  }
+}
+
+function openSafeUpdateUrl(url) {
+  const target = url || latestReleaseUrl;
+  try {
+    const parsed = new URL(target);
+    if (parsed.protocol !== 'https:' || parsed.hostname !== 'github.com') throw new Error('Update URL must be a GitHub HTTPS link.');
+    return shell.openExternal(parsed.toString());
+  } catch {
+    return shell.openExternal(latestReleaseUrl);
+  }
 }
 
 function mediaUrl(filePath) {
@@ -634,6 +736,7 @@ function buildAppMenu() {
         { label: 'New Project', accelerator: 'CmdOrCtrl+N', click: () => sendMenuAction('new-project') },
         { label: 'Change Output Folder', click: () => sendMenuAction('change-output-folder') },
         { label: 'View Log', accelerator: 'CmdOrCtrl+L', click: () => showLogWindow() },
+        { label: 'Check for Updates', click: () => sendMenuAction('check-updates') },
         { type: 'separator' },
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
@@ -676,6 +779,7 @@ function buildAppMenu() {
       submenu: [
         { label: 'YouTube Automation Tools', click: () => shell.openExternal('http://ytatools.co') },
         { label: 'View License', click: () => shell.openExternal('https://github.com/vpfintech/youtube-clip-maker?tab=License-1-ov-file') },
+        { label: 'Check for Updates', click: () => sendMenuAction('check-updates') },
         { label: 'View Activity Log', click: () => showLogWindow() },
         { type: 'separator' },
         { label: `About ${appName}`, click: () => shell.openExternal('http://ytatools.co') }
@@ -756,6 +860,8 @@ ipcMain.handle('update-project-name', async (_event, requestedProjectName) => {
   return projectName;
 });
 ipcMain.handle('open-youtube', async (_event, url) => shell.openExternal(url));
+ipcMain.handle('check-for-updates', async () => checkForUpdates());
+ipcMain.handle('open-update-download', async (_event, url) => openSafeUpdateUrl(url));
 ipcMain.handle('choose-output-folder', async () => {
   const result = await dialog.showOpenDialog(mainWindow, { properties: ['openDirectory', 'createDirectory'] });
   if (!result.canceled && result.filePaths[0]) {

@@ -18,6 +18,8 @@ contextBridge.exposeInMainWorld('clipMaker', {
   clearLog: () => ipcRenderer.invoke('clear-log'),
   hideLogWindow: () => ipcRenderer.invoke('hide-log-window'),
   diagnostics: () => ipcRenderer.invoke('diagnostics'),
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  openUpdateDownload: (url) => ipcRenderer.invoke('open-update-download', url),
   onLog: (callback) => {
     const listener = (_event, line) => callback(line);
     ipcRenderer.on('log', listener);

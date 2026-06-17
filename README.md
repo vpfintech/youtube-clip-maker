@@ -100,6 +100,25 @@ Notes:
 - If `yt-dlp.exe` is missing after install, run `npm run fetch-binaries`, then
   run `npm run dist:win` again.
 
+## Updates
+
+Installed copies of YT Clip Maker check GitHub Releases on launch. When a newer
+release exists, the app shows an inline update banner with a **Download installer**
+button. The button opens the correct installer asset from the latest GitHub
+Release when one is available, or the latest release page as a fallback.
+
+Users normally do **not** need to uninstall first. They can run the newer macOS
+DMG or Windows NSIS installer over the existing installation.
+
+Release assets should be uploaded to GitHub Releases, not committed to the repo:
+
+```text
+YT Clip Maker-<version>-arm64.dmg
+YT Clip Maker-Setup-<version>.exe
+latest-mac.yml
+latest.yml
+```
+
 ## Output folders
 
 By default, files are saved under:
