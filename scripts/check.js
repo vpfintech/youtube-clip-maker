@@ -37,10 +37,24 @@ function assertSource(file, pattern, message) {
   }
 }
 
+function assertNoSource(file, pattern, message) {
+  const content = fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
+  if (pattern.test(content)) {
+    failed = true;
+    console.error(`\n${file}`);
+    console.error(message);
+  } else {
+    console.log(`ok ${message}`);
+  }
+}
+
 assertSource('src/renderer/styles.css', /\.video-list\s*\{[^}]*flex:\s*1;[^}]*max-height:\s*none;/s, 'videos list fills available card height');
 assertSource('src/renderer/index.html', /id="mediaActionHint"[^>]*>Add a project name to enable Download and Generate Clips\./, 'disabled media action hint exists');
 assertSource('src/renderer/styles.css', /\.action-hint\s*\{(?=[^}]*background:\s*#2b1712;)(?=[^}]*color:\s*#fff7ed;)(?=[^}]*border-left:\s*4px\s+solid\s+var\(--brand\);)/s, 'disabled media action hint uses high-contrast warning colors');
 assertSource('src/renderer/app.js', /onMenuAction\(\(action\) =>[\s\S]*new-project[\s\S]*change-output-folder[\s\S]*view-log/, 'renderer handles native menu actions');
+assertNoSource('src/renderer/app.js', new RegExp('to' + 'ast', 'i'), 'renderer does not trigger popup notifications');
+assertNoSource('src/renderer/index.html', new RegExp('id="to' + 'ast"|class="to' + 'ast', 'i'), 'renderer HTML has no popup notification element');
+assertNoSource('src/renderer/styles.css', new RegExp('\\.to' + 'ast\\b', 'i'), 'renderer CSS has no popup notification styles');
 assertSource('src/main/preload.js', /onMenuAction:\s*\(callback\) =>[\s\S]*ipcRenderer\.on\('menu-action'/, 'preload exposes native menu action bridge');
 assertSource('src/main/main.js', /Menu\.setApplicationMenu\(Menu\.buildFromTemplate\(template\)\)/, 'native app menu is explicitly configured');
 assertSource('src/main/main.js', /label:\s*'File'[\s\S]*New Project[\s\S]*Change Output Folder[\s\S]*View Log/, 'native File menu contains app actions');
