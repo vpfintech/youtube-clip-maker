@@ -279,7 +279,6 @@ select, .number-input { border:1px solid #d8d1c8; border-radius:6px; height:32px
 .creator-tools-row { color: var(--muted); font-weight: 600; font-size: 13px; padding: 10px 4px 0; text-align: center; }
 .creator-tools-row a { color: var(--brand); text-decoration: none; }
 .creator-tools-row a:hover { text-decoration: underline; }
-.toast { position:fixed; right:22px; bottom:22px; max-width:520px; background:#17130f; color:white; padding:14px 16px; border-radius:9px; box-shadow:var(--shadow); z-index:10; }
 .skeleton { position: relative; overflow:hidden; background:#eee7dd !important; color:transparent !important; }
 .skeleton:after { content:''; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent); animation: shimmer 1.1s infinite; }
 @keyframes shimmer { 100% { transform:translateX(100%); } }

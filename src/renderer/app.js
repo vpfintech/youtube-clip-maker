@@ -15,13 +15,8 @@ function icon() { window.feather?.replace(); }
 function selectedVideo() { return state.videos.find((video) => video.id === state.selectedId); }
 function currentProjectName() { return $('projectName')?.value.trim().replace(/\s+/g, ' ') || ''; }
 function hasProjectName() { return Boolean(currentProjectName()); }
-function toast(message, isError = false) {
-  const el = $('toast');
-  el.textContent = message;
-  el.style.background = isError ? '#b42318' : '#101a33';
-  el.classList.remove('hidden');
-  clearTimeout(toast.timer);
-  toast.timer = setTimeout(() => el.classList.add('hidden'), 4200);
+function reportError(error) {
+  console.error(error?.message || String(error));
 }
 function updateMediaActionState(video = selectedVideo()) {
   const ready = hasProjectName();
@@ -35,7 +30,6 @@ function setBusy(busy, label = 'Working...') {
   $('findBtn').disabled = busy;
   updateMediaActionState();
   updateDeleteProjectState();
-  if (busy) toast(label);
 }
 function canDeleteProject() {
   return Boolean(state.currentProjectId || state.videos.length || state.projectName);
@@ -198,10 +192,9 @@ async function findVideos() {
     await loadProjects();
     state.currentProjectId = state.projects[0]?.id || null;
     render();
-    toast(`Found ${videos.length} video${videos.length === 1 ? '' : 's'}.`);
   } catch (error) {
     render();
-    toast(error.message || String(error), true);
+    reportError(error);
   } finally {
     setBusy(false);
   }
@@ -212,7 +205,6 @@ async function downloadSelected() {
   updateProjectNameState();
   if (!state.projectName) {
     $('projectName').focus();
-    toast('Add a project name before downloading.', true);
     return;
   }
   startProgress('download', 'Starting download...');
@@ -223,10 +215,9 @@ async function downloadSelected() {
     await loadProjects();
     render();
     finishProgress('Download complete.');
-    toast('Download complete.');
   } catch (error) {
     setProgress(null);
-    toast(error.message || String(error), true);
+    reportError(error);
   } finally {
     setBusy(false);
   }
@@ -237,7 +228,6 @@ async function createClips() {
   updateProjectNameState();
   if (!state.projectName) {
     $('projectName').focus();
-    toast('Add a project name before generating clips.', true);
     return;
   }
   startProgress('clips', 'Preparing clips...');
@@ -255,10 +245,9 @@ async function createClips() {
     await loadProjects();
     render();
     finishProgress(`Generated ${result.count} clips.`);
-    toast(`Generated ${result.count} clips.`);
   } catch (error) {
     setProgress(null);
-    toast(error.message || String(error), true);
+    reportError(error);
   } finally {
     setBusy(false);
   }
@@ -273,7 +262,6 @@ async function chooseOutput() {
     render();
   }
   updateOutput(folder);
-  toast('Output folder updated.');
 }
 async function startNewProject() {
   if (state.busy) return;
@@ -290,9 +278,8 @@ async function startNewProject() {
     updateOutput(result.outputFolder);
     render();
     $('projectName').focus();
-    toast('New blank project ready.');
   } catch (error) {
-    toast(error.message || String(error), true);
+    reportError(error);
   }
 }
 async function deleteProject() {
@@ -313,7 +300,7 @@ async function deleteProject() {
     updateOutput(result.outputFolder);
     render();
   } catch (error) {
-    toast(error.message || String(error), true);
+    reportError(error);
   } finally {
     setBusy(false);
   }
@@ -332,7 +319,7 @@ async function openProject(projectId) {
     updateOutput(result.outputFolder);
     render();
   } catch (error) {
-    toast(error.message || String(error), true);
+    reportError(error);
   }
 }
 document.addEventListener('DOMContentLoaded', async () => {
